@@ -15,7 +15,11 @@ mongoose.connect(db, { useNewUrlParser: true }).then(() => {
   console.log('MongoDB Connected')
 }).catch(() => {
   console.log('Connection failed')
-})
+});
+
+// ROUTES
+const todos = require('./routes/api/todos');
+app.use('/api/todos', todos);
 
 // PORT
 const port = process.env.PORT || 5000;
