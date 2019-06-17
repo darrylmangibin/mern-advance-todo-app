@@ -19,14 +19,48 @@ router.get('/', (req, res) => {
 // @desc Create a todos
 // @access Public
 router.post('/', (req, res) => {
-  const { name } =req.body;
+  const { title } =req.body;
   const newItem = new Todo({
-    name
+    title
   });
   newItem.save().then((todo) => {
     res.status(200).json({ success: true, todo })
   }).catch((err) => {
     res.status(400).json({ success: false, msg: 'Unable to save the data' })
+  })
+})
+
+// @ROUTE DELETE
+// @desc Create a todos
+// @access Public
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  Todo.findById(id).then((todo) => {
+    todo.remove().then((todo) => {
+      res.status(200).json({ success: true, todo })
+    }).catch(() => {
+      res.status(400).json({ success: false })
+    })
+  }).catch((err) => {
+    res.status(400).json({ success: false })
+  })
+})
+
+// @ROUTE PUT
+// @desc Edit todos
+// @access Public
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+  Todo.findById(id).then((todo) => {
+    todo.completed = completed
+    todo.save().then((todo) => {
+      res.status(200).json(todo)
+    }).catch((err) => {
+      res.status(400).json({ success: false })
+    })
+  }).catch(() => {
+    res.status(400).json({ success: false })
   })
 })
 
