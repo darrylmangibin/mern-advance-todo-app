@@ -23,6 +23,10 @@ input[type="checkbox"] {
   margin-right: 8px;
 }
 
-label {
+.FilterTodos label {
   padding: 8px 2px;
+  cursor: pointer;
+}
+.FilterTodos input {
+  cursor: pointer;
 }
