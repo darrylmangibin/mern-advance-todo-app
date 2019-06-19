@@ -1,0 +1,15 @@
+.AddTodos {
+  background-color: #353239;
+  padding: 2rem 2rem
+}
+
+.formContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.AddTodos input {
+  width: 50%;
+  margin-right: 50px;
+}

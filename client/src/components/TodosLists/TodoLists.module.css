@@ -1,0 +1,18 @@
+.TodosLists {
+  flex-direction: column;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+}
+
+.TodosLists h2 {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.TodosLists p {
+  font-weight: bold;
+  font-size: 14px;
+}
