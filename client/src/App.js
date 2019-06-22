@@ -3,6 +3,8 @@ import 'normalize.css';
 
 import NavBar from './components/NavBar';
 import Filter from './components/Filter';
+import Lists from './components/Lists';
+import FormLists from './components/Form';
 
 const App = () => {
   return (
@@ -11,6 +13,8 @@ const App = () => {
         title="Todo-App"
       />
       <Filter />
+      <Lists />
+      <FormLists />
     </React.Fragment>
   )
 }
