@@ -54,13 +54,41 @@ router.delete('/:id', (req, res) => {
       res.status(200).json({
         success: true,
         todo
-      })
-    })
+      });
+    });
   }).catch((err) => {
     console.log(err)
     res.status(400).json({
       success: false,
       message: 'No data found'
+    });
+  });
+});
+
+// @ROUTE PUT
+// @desc Edit a todos
+// @access Public
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+  Todos.findById({ _id: id }).then((todo) => {
+    if(!todo) {
+      res.status(404).json({
+        success: false,
+        message: 'No data found'
+      });
+    }
+    todo.completed = completed;
+    todo.save().then((todo) => {
+      res.status(200).json({
+        success: true,
+        todo
+      })
+    }).catch((err) => {
+      res.status(400).json({
+        success: false,
+        message: 'No data found'
+      })
     })
   })
 })
