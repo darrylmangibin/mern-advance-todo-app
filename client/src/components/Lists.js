@@ -9,7 +9,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-import Delete from '@material-ui/icons/Delete';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 const styles = {
   container: {
@@ -53,7 +53,7 @@ class Lists extends React.Component {
                 <ListItemText primary="Todo 1" />
                 <ListItemSecondaryAction>
                   <IconButton edge="end" aria-label="Delete">
-                    <Delete />
+                  <DeleteForeverIcon />
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>

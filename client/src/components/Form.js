@@ -28,7 +28,7 @@ class FormLists extends React.Component {
             className={classes.textField}
             margin="normal"
           />
-          <Button variant="contained" color="secondary">
+          <Button variant="contained" color="primary">
             Add Todo
           </Button>
         </form>
