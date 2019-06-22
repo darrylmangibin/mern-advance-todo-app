@@ -40,4 +40,29 @@ router.post('/', (req, res) => {
   })
 });
 
+// @ROUTE DELETE
+// @desc Delete a todos
+// @access Public
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  Todos.findById({ _id: id }).then((todo) => {
+    if(!todo) return res.status(400).json({
+      success: false,
+      message: 'No data found'
+    })
+    todo.remove().then((todo) => {
+      res.status(200).json({
+        success: true,
+        todo
+      })
+    })
+  }).catch((err) => {
+    console.log(err)
+    res.status(400).json({
+      success: false,
+      message: 'No data found'
+    })
+  })
+})
+
 module.exports = router;
