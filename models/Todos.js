@@ -8,7 +8,7 @@ const TodosSchema = new Schema({
   },
   completed: {
     type: Boolean,
-    required: true
+    default: false
   }
 })
 

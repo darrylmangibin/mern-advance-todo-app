@@ -20,4 +20,24 @@ router.get('/', (req, res) => {
   })
 })
 
+// @ROUTE POST
+// @desc Create a todos
+// @access Public
+router.post('/', (req, res) => {
+  const { title } = req.body;
+  const newTodo = new Todos({
+    title
+  });
+  newTodo.save().then((todo) => {
+    res.status(200).json({
+      success: true,
+      data: todo
+    })
+  }).catch((err) => {
+    res.status(400).json({
+      success: false
+    })
+  })
+});
+
 module.exports = router;
