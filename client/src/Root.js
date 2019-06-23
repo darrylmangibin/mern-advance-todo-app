@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import configureStore from './configureStore/configureStore';
+import configureStore from './store/configureStore';
 
-const store = configureStore()
+const store = configureStore();
 
-const Root = (props) => {
+const Root = ({ children }) => {
   return (
     <Provider store={store}>
-      {props.children}
+      {children}
     </Provider>
   )
 }

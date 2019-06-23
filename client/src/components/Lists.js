@@ -3,13 +3,10 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { connect } from 'react-redux';
+import { getTodos } from '../actions';
+
+import Todos from './Todo';
 
 const styles = {
   container: {
@@ -31,37 +28,80 @@ const styles = {
 }
 
 class Lists extends React.Component {
+
+  componentDidMount(a, b) {
+    const {getTodos} = this.props;
+    getTodos();
+  }
+
+  renderTodos = () => {
+    const { classes, todos } = this.props;
+    if(todos.length <= 0) {
+      return (
+        <Typography variant="body1" align="center" className={classes.subtitle}>
+          There are no to-dos to show
+        </Typography>
+      )
+    }
+    return (   
+      <List className={classes.root}>
+        {todos.map(todo =>
+            <Todos 
+              key={todo._id}
+              todo={todo}
+            />  
+          ).filter((todo) => {
+            const { title } = todo.props.todo;
+            const { filter } = this.props;
+            if(title.toLowerCase().indexOf(filter.toLowerCase()) > -1) {
+              return todo
+            }
+          }).filter((todo) => {
+            console.log(todo)
+            if(!this.props.hide) {
+              return todo
+            } else {
+              return !todo.props.todo.completed
+            }
+          })
+        }
+      </List>
+    )
+  }
+
   render() {
-    const { classes } = this.props;
+    const { classes, todos } = this.props;
+    const incomplete = todos.filter((todo) => !todo.completed)
     return (
       <Container maxWidth="sm" className={classes.container}>
           <Typography variant="h5" align="center">
-            You have 0 todos left
+            You have {incomplete.length} todo{incomplete.length > 1 ? 's' : ''} left
           </Typography>
           <div className={classes.ListContainer}>
-            <Typography variant="body1" align="center" className={classes.subtitle}>
-              There are no to-dos to show
-            </Typography>
-            <List className={classes.root}>
-              <ListItem dense button>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    disableRipple
-                  />
-                </ListItemIcon>
-                <ListItemText primary="Todo 1" />
-                <ListItemSecondaryAction>
-                  <IconButton edge="end" aria-label="Delete">
-                  <DeleteForeverIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            </List>
+              {this.renderTodos()}
           </div>
       </Container>
     )
   }
 }
 
-export default withStyles(styles)(Lists);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getTodos: () => {
+      return dispatch(getTodos())
+    },
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    todos: state.todos.todos,
+    completed: state.todos.completed,
+    filter: state.filter.filter,
+    hide: state.filter.hide
+  }
+}
+
+const WrappedLists = withStyles(styles)(Lists)
+
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedLists);

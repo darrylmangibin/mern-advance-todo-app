@@ -4,12 +4,15 @@ const Schema = mongoose.Schema;
 const TodosSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: 1
   },
   completed: {
     type: Boolean,
     default: false
   }
-})
+});
 
-module.exports = Todos = mongoose.model('todo', TodosSchema);
+const Todos = mongoose.model('todo', TodosSchema);
+
+module.exports = Todos;

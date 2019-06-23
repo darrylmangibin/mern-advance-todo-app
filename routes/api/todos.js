@@ -1,94 +1,95 @@
 const express = require('express');
+
 const router = express.Router();
 
 // MODELS
 const Todos = require('../../models/Todos');
 
-
 // @ROUTE GET
-// @desc Get all todos
-// @access Public
+// @desc Get all Todos
+// @access PUBLIC
 router.get('/', (req, res) => {
-  Todos.find().then((todos) => {
-    res.json(todos)
-  }).catch((err) => {
-    console.log(err)
-    res.status(400).json({
-      success: false,
-      message: 'Could not get the data'
-    })
-  })
-})
+  Todos.find((err, todos) => {
+    if(err) {
+      return res.status(404).json({
+        success: false
+      });
+    }
+    return res.status(200).json(todos)
+  });
+});
 
 // @ROUTE POST
-// @desc Create a todos
-// @access Public
+// @desc Create a Todo
+// @access PUBLIC
 router.post('/', (req, res) => {
-  const { title } = req.body;
   const newTodo = new Todos({
-    title
+    title: req.body.title
   });
-  newTodo.save().then((todo) => {
-    res.status(200).json({
-      success: true,
-      data: todo
+  
+  Todos.findOne({ title: req.body.title }, (err, doc) => {
+    if(err) return res.status(404).json({
+      success: false,
+      message: 'Please add a todo'
     })
-  }).catch((err) => {
-    res.status(400).json({
-      success: false
-    })
+    if(doc) {
+      return res.json({
+        success: false,
+        message: 'Todo already exist'
+      })
+    }
+    newTodo.save((err, todo) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: 'Could not Create a list'
+        })
+      };
+      return res.status(200).json(todo)
+    });
   })
 });
 
 // @ROUTE DELETE
-// @desc Delete a todos
-// @access Public
+// @desc Delete a Todo
+// @access PUBLIC
 router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  Todos.findById({ _id: id }).then((todo) => {
-    if(!todo) return res.status(400).json({
+  Todos.findById({ _id: req.params.id }, (err, todo) => {
+    if (!todo) return res.status(400).json({
       success: false,
       message: 'No data found'
-    })
-    todo.remove().then((todo) => {
-      res.status(200).json({
-        success: true,
-        todo
+    });
+
+    if(err) return res.status(400).json({
+      success: false,
+      message: 'No data found'
+    });
+    todo.remove((err, doc) => {
+      if (err) return res.status(400).json({
+        success: false,
+        message: 'No data found'
       });
-    });
-  }).catch((err) => {
-    console.log(err)
-    res.status(400).json({
-      success: false,
-      message: 'No data found'
-    });
-  });
-});
+      return res.status(200).json(doc)
+    })
+  })
+})
 
 // @ROUTE PUT
-// @desc Edit a todos
-// @access Public
+// @desc Edit a Todo
+// @access PUBLIC
 router.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const { completed } = req.body;
-  Todos.findById({ _id: id }).then((todo) => {
-    if(!todo) {
-      res.status(404).json({
+  Todos.findById(req.params.id, (err, todo) => {
+    if(err) return res.status(400).json({
+      success: false,
+      message: 'Could not change the data'
+    });
+    todo.completed = req.body.completed
+    todo.save((err, doc) => {
+      if (err) return res.status(400).json({
         success: false,
-        message: 'No data found'
+        message: 'Could not change the data'
       });
-    }
-    todo.completed = completed;
-    todo.save().then((todo) => {
-      res.status(200).json({
-        success: true,
-        todo
-      })
-    }).catch((err) => {
-      res.status(400).json({
-        success: false,
-        message: 'No data found'
-      })
+      return res.status(200).json(todo)
     })
   })
 })
